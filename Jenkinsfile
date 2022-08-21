@@ -1,13 +1,12 @@
 pipeline {
     agent any
 
-  tools {
-        // Install the Maven version configured as "MAVEN_HOME" and add it to the path.
-        maven "MAVEN_HOME"
-    }
-
     stages {
         stage('Build') {
+        tools {
+                // Install the Maven version configured as "MAVEN_HOME" and add it to the path.
+                maven "MAVEN_HOME"
+            }
             steps {
             // Get some code from a GitHub repository
             git 'https://github.com/shanuchauhan94/graphql-ck-serviec.git'
