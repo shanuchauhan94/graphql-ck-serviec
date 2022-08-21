@@ -1,0 +1,29 @@
+
+type EmployeeResponse {
+email : String
+salary : Int
+}
+
+type employeeList {
+    ck : EmployeeCompositeKey
+    name : String
+    age : Int
+    eduSummery : [EducationSummerys]
+    skillSets : [SkillSets]
+}
+
+type EmployeeCompositeKey {
+    email : String
+    salary : Int
+}
+
+type EducationSummerys {
+    education : String
+    grade : String
+    location : String
+}
+
+type SkillSets {
+    skill : String
+    experience : Int
+}

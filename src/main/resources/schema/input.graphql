@@ -1,0 +1,20 @@
+input EmployeeRecord {
+    email : String
+    salary : Int
+    name : String
+    age : Int
+    eduSummery : [EducationSummery]
+    skillSets : [SkillSet]
+}
+
+
+input EducationSummery {
+    education : String
+    grade : String
+    location : String
+}
+
+input SkillSet {
+    skill : String
+    experience : Int
+}
