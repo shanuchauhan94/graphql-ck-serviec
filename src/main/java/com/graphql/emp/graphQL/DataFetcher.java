@@ -1,14 +1,19 @@
 package com.graphql.emp.graphQL;
 
+import com.graphql.emp.exception.GraphQLExceptionHandler;
 import com.graphql.emp.service.EmployeeService;
 import graphql.GraphQL;
 import graphql.schema.GraphQLSchema;
 import graphql.schema.idl.*;
+import graphql.servlet.GraphQLObjectMapper;
+import graphql.servlet.SimpleGraphQLHttpServlet;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -20,13 +25,30 @@ public class DataFetcher {
 
     private final EmployeeService employeeService;
 
+    private SimpleGraphQLHttpServlet graphQLHttpServlet;
+
+    private final GraphQLExceptionHandler exceptionHandler;
+
+    private GraphQL graphQL;
+
     @Autowired
-    public DataFetcher(EmployeeService employeeService) {
+    public DataFetcher(EmployeeService employeeService, GraphQLExceptionHandler exceptionHandler) {
         this.employeeService = employeeService;
+        this.exceptionHandler = exceptionHandler;
     }
 
     @Bean
-    public GraphQL graphQL() {
+    public ServletRegistrationBean<SimpleGraphQLHttpServlet> graphQlServlet() {
+        return new ServletRegistrationBean<>(graphQLHttpServlet, "/graphql");
+    }
+
+    @Bean
+    public GraphQL getGraphQL() {
+        return graphQL;
+    }
+
+    @PostConstruct
+    public void init() throws IOException {
 
         SchemaParser schemaParser = new SchemaParser();
         TypeDefinitionRegistry definitionRegistry = new TypeDefinitionRegistry();
@@ -38,7 +60,11 @@ public class DataFetcher {
         SchemaGenerator schemaGenerator = new SchemaGenerator();
         GraphQLSchema graphQLSchema = schemaGenerator.makeExecutableSchema(definitionRegistry, buildRunTimeWiring());
 
-        return GraphQL.newGraphQL(graphQLSchema).build();
+        this.graphQL = GraphQL.newGraphQL(graphQLSchema).build();
+
+        GraphQLObjectMapper mapper = GraphQLObjectMapper.newBuilder().withGraphQLErrorHandler(this.exceptionHandler).build();
+        this.graphQLHttpServlet = SimpleGraphQLHttpServlet.newBuilder(graphQLSchema).withObjectMapper(mapper).build();
+
     }
 
     public RuntimeWiring buildRunTimeWiring() {
