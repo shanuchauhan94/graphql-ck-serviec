@@ -1,17 +1,24 @@
+
+currentBuild.displayName="employee-build - "+currentBuild.number
+
 pipeline {
     agent any
 
+parameters{
+    string defaultValue: 'shanu', description: 'enter you name', name: 'name'
+}
     stages {
         stage ('Build') {
             steps {
                 withMaven(maven : 'MAVEN_HOME') {
                     bat "mvn -Dmaven.test.failure.ignore=true clean compile"
+                    echo "name -> $name"
 
                 }
             }
         }
 
-        stage ('Testing') {
+        stage ('Test') {
 
             steps {
                 withMaven(maven : 'MAVEN_HOME') {
@@ -26,20 +33,32 @@ pipeline {
 
         }
 
-
-        stage ('Deployment') {
+        stage ('Sonar-Scan') {
             steps {
+                withSonarQubeEnv('sc'){
                 withMaven(maven : 'MAVEN_HOME') {
-                    bat "mvn -Dmaven.test.failure.ignore=true verify"
+                    bat "mvn -Dmaven.test.failure.ignore=true clean verify sonar:sonar \
+                         -Dsonar.projectKey=employee-code \
+                         -Dsonar.host.url=http://127.0.0.1:9000 \
+                         -Dsonar.login=sqp_45da113e82af152533f09588c25775f862a3c8b2"
+
+                 }
                 }
             }
-        }
-
+            }
 
         stage ('Archiving') {
             steps {
                 archiveArtifacts '**/target/*.jar'
         }
     }
+
+        stage ('Deployment') {
+            steps {
+                 echo "deployment in progress......"
+            }
+        }
+
+
 }
 }
