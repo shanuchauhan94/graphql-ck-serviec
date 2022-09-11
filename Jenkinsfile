@@ -12,7 +12,7 @@ parameters{
             steps {
                 withMaven(maven : 'MAVEN_HOME') {
                     bat "mvn -Dmaven.test.failure.ignore=true clean compile"
-                    echo "name -> $name"
+                    echo "build user name -> $name"
 
                 }
             }
