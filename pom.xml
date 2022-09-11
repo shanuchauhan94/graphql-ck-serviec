@@ -65,6 +65,12 @@
             <artifactId>hibernate-types-52</artifactId>
             <version>2.4.3</version>
         </dependency>
+        <dependency>
+            <groupId>org.jacoco</groupId>
+            <artifactId>org.jacoco.agent</artifactId>
+            <version>${jacoco.version}</version>
+            <scope>test</scope>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -91,39 +97,44 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>${jacoco.version}</version>
+                <configuration>
+                    <append>true</append>
+                </configuration>
                 <executions>
                     <execution>
-                        <id>prepare-agent</id>
+                        <id>default-instrument</id>
+                        <goals>
+                            <goal>instrument</goal>
+                        </goals>
+                        <configuration>
+                            <includes>
+                                <include>**/*test*</include>
+                            </includes>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>default-restore-instrumented-classes</id>
+                        <goals>
+                            <goal>restore-instrumented-classes</goal>
+                        </goals>
+                        <configuration>
+                            <includes>
+                                <include>**/*test*</include>
+                            </includes>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>Prepare-Jacoco</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
-                    </execution>
-                    <execution>
-                        <id>report</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>post-unit-test</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
                         <configuration>
-                            <dataFile>target/jacoco.exec</dataFile>
-                            <!-- Sets the output directory for the code coverage report. -->
-                            <outputDirectory>target/jacoco-ut</outputDirectory>
+                            <excludes>
+                                <exclude>**/*test*</exclude>
+                            </excludes>
                         </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <propertyName>
-                        <jacoco-agent.destfile>target/jacoco.exec</jacoco-agent.destfile>
-                    </propertyName>
-                </configuration>
-
             </plugin>
 
             <plugin>
