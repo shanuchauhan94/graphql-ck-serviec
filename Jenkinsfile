@@ -8,6 +8,12 @@ parameters{
     string defaultValue: 'shanu', description: 'enter you name', name: 'name'
 }
     stages {
+
+        stage ('Git Checkout') {
+            steps {
+                  git credentialsId: 'Jenkins-GitHub', url: 'https://github.com/shanuchauhan94/graphql-ck-serviec.git'
+                }
+            }
         stage ('Build') {
             steps {
                 withMaven(maven : 'MAVEN_HOME') {
@@ -27,6 +33,7 @@ parameters{
             }
             post {
                 always {
+                Jacoco()
                     junit allowEmptyResults: true, testResults: 'target/surefire-reports/TEST-*.xml'
                 }
             }
