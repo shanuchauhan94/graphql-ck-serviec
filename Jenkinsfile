@@ -1,12 +1,8 @@
 
-currentBuild.displayName="employee-build - "+currentBuild.number
+currentBuild.displayName=currentBuild.number+" process"
 
 pipeline {
     agent any
-
-parameters{
-    string defaultValue: 'shanu', description: 'enter you name', name: 'name'
-}
     stages {
 
         stage ('Git Checkout') {
