@@ -31,7 +31,7 @@ pipeline {
         stage ('Sonar-Scan') {
             steps {
                 withSonarQubeEnv('sc'){
-                    bat "mvn clean verify sonar:sonar \
+                    bat "mvn sonar:sonar -Pcoverage \
                          -Dsonar.projectKey=employee-code \
                          -Dsonar.host.url=http://127.0.0.1:9000 \
                          -Dsonar.login=sqp_45da113e82af152533f09588c25775f862a3c8b2"
