@@ -32,6 +32,11 @@ pipeline {
                 }
             }
             }
+      stage ('Jacoco-Report') {
+            steps {
+               bat "mvn jacoco:report"
+            }
+            }
 
         stage ('Deployment') {
             steps {
