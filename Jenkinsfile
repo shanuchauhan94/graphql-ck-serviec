@@ -5,12 +5,6 @@ pipeline {
         maven 'MAVEN_HOME'
     }
     stages {
-
-        stage ('Git Checkout') {
-            steps {
-                  git credentialsId: 'Jenkins-GitHub', url: 'https://github.com/shanuchauhan94/graphql-ck-serviec.git'
-                }
-            }
         stage ('Build') {
             steps {
                     bat "mvn clean package"
