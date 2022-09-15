@@ -3,6 +3,7 @@ package com.graphql.emp.exception;
 import graphql.ErrorType;
 import graphql.GraphQLError;
 import graphql.language.SourceLocation;
+import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Data
 public class GraphQlErrorResponse implements GraphQLError {
 
     private String message;
@@ -47,9 +49,7 @@ public class GraphQlErrorResponse implements GraphQLError {
 
     @Override
     public Map<String, Object> getExtensions() {
-        Map<String, Object> objectMap = new HashMap<>();
-        objectMap.put("error-code", this.errorCode);
-        return objectMap;
+        return new HashMap<>();
     }
 
     public List<String> getInvalidQueryFields() {
