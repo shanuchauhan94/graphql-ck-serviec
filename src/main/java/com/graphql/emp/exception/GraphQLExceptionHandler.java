@@ -22,7 +22,7 @@ public class GraphQLExceptionHandler implements GraphQLErrorHandler {
         List<GraphQLError> clientErrors = this.filterGraphQLErrors(errors);
         if (clientErrors.size() < errors.size()) {
             clientErrors.add(new GenericGraphQLError("Internal Server Error(s) while executing query"));
-            errors.stream().filter((error) -> !this.isClientError(error)).forEach((error) -> {
+            errors.stream().filter(error -> !this.isClientError(error)).forEach((error) -> {
                 if (error instanceof Throwable) {
                     log.error("Error executing query!", (Throwable) error);
                 } else {

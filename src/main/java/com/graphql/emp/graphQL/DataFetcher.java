@@ -50,7 +50,7 @@ public class DataFetcher {
     }
 
     @PostConstruct
-    public void init() throws IOException {
+    public void init() {
 
         SchemaParser schemaParser = new SchemaParser();
         TypeDefinitionRegistry definitionRegistry = new TypeDefinitionRegistry();
