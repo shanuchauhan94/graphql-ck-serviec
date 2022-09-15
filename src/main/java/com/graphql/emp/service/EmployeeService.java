@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -24,12 +25,12 @@ public class EmployeeService {
     }
 
 
-    public DataFetcher getEmployeeRecord() {
+    public DataFetcher<List<Employee>> getEmployeeRecord() {
         log.info("Get employee service executing.");
         return environment -> repository.findAll();
     }
 
-    public DataFetcher saveEmployeeRecord() {
+    public DataFetcher<EmployeeResponse> saveEmployeeRecord() {
         log.info("save employee service executing.");
         return environment -> {
             LinkedHashMap<String, Object> emp = environment.getArgument("employee");

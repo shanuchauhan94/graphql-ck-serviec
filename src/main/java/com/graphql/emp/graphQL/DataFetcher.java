@@ -7,6 +7,7 @@ import graphql.schema.GraphQLSchema;
 import graphql.schema.idl.*;
 import graphql.servlet.GraphQLObjectMapper;
 import graphql.servlet.SimpleGraphQLHttpServlet;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -20,6 +21,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Configuration
 public class DataFetcher {
 
@@ -85,7 +87,7 @@ public class DataFetcher {
                 return IOUtils.toString(url, StandardCharsets.UTF_8);
             }
         } catch (IOException e) {
-            System.err.println("schema file read exception {} " + e.getMessage());
+            log.error("schema file read exception {} " + e.getMessage());
         }
         return "";
     }
